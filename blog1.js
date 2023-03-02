@@ -138,6 +138,6 @@ export function start(){
 
 
 window.addEventListener("load", () => {
-    post = JSON.parse(localStorage.getItem("posts")) || [];
+    post = JSON.parse(localStorage.getItem("posts1")) || [];
     renderPosts();
 });
