@@ -115,3 +115,5 @@ window.addEventListener("load", () => {
     post = JSON.parse(localStorage.getItem("posts")) || [];
     refreshPosts();
 });
+
+document.getElementById('add').addEventListener("click", (event) => { event.preventDefault(); showAdd();});
