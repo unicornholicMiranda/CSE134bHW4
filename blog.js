@@ -19,11 +19,9 @@ var post = JSON.parse(localStorage.getItem("posts")) || [];
 var curr = 0;
 
 
-
-export function renderPosts() {
-    updatedialog.style.visibility="hidden";
-    deldialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
+//refresh the post list, add new table rows and data, also add delete btn , edit button to each row
+export function refreshPosts() {
+    clear();
     table.innerHTML = "";
     for (let i = 0; i < post.length; i++) {
         const temp = post[i];
@@ -49,101 +47,71 @@ export function renderPosts() {
         table.appendChild(tr);
     }
 }
-
-function getcurr(){
-    return curr;
-}
-
+//save the post and add it to the posts list
 export function save() {
-    updatedialog.style.visibility="hidden";
-    deldialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
+    clear();
     post.push(`${titleinput.value} | ${dateinput.value} | ${suminput.value}`);
     titleinput.value = ""; 
     dateinput.value = "";
     suminput.value = "";
     localStorage.setItem("posts", JSON.stringify(post));
-    renderPosts();
-    
+    refreshPosts();
 }
-
-function showdel(){
-    updatedialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
-    deldialog.style.visibility="visible";
+//shwo the old data for the current post and replace with new input if has any
+export function editf(index) {
+    post[index] = `${titleinput2.value} | ${dateinput2.value} | ${suminput2.value}`;
+    localStorage.setItem("posts", JSON.stringify(post));
+    refreshPosts();
 }
-
+//delete the current post and regenerate the post list
 export function delf(index) {
-    updatedialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
-    deldialog.style.visibility="hidden";
+    clear();
     post.splice(index, 1);
     localStorage.setItem("posts", JSON.stringify(post));
-    renderPosts();
+    refreshPosts();
 }
-
-function showpre(index){
-    updatedialog.style.visibility="visible";
+//return the current posts's index
+function getcurr(){
+    return curr;
+}
+//clear every dialog on the screen
+function clear(){
+    updatedialog.style.visibility="hidden";
     deldialog.style.visibility="hidden";
     postdialog.style.visibility = "hidden";
+}
+//show the delete dialog 
+function showdel(){
+    clear();
+    deldialog.style.visibility="visible";
+}
+//show the edit dialog for the post selected, put the data saved for this post in the input for user to review
+function showpre(index){
+    clear();
+    updatedialog.style.visibility="visible";
     const temp = post[index];
     titleinput2.value = temp.split("|")[0];
     dateinput2.value = temp.split("|")[1];
     suminput2.value = temp.split("|")[2];
 }
-
-export function editf(index) {
-    post[index] = `${titleinput2.value} | ${dateinput2.value} | ${suminput2.value}`;
-    localStorage.setItem("posts", JSON.stringify(post));
-    renderPosts();
-}
-
-postform.addEventListener("submit", (event) => { 
-    event.preventDefault();
-    save();
-});
-
-document.getElementById('confirm').addEventListener("click", (event) => { 
-    event.preventDefault();
-    editf(getcurr());
-});
-
-
-document.getElementById('cancle').addEventListener("click", (event) => { 
-    event.preventDefault();
-    updatedialog.style.visibility="hidden";
-    deldialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
-});
-
-
-document.getElementById('cancle1').addEventListener("click", (event) => { 
-    event.preventDefault();
-    updatedialog.style.visibility="hidden";
-    deldialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
-});
-
-document.getElementById('Cancle2').addEventListener("click", (event) => { 
-    event.preventDefault();
-    updatedialog.style.visibility="hidden";
-    deldialog.style.visibility="hidden";
-    postdialog.style.visibility = "hidden";
-});
-
-document.getElementById('ok').addEventListener("click", (event) => { 
-    event.preventDefault();
-    delf(getcurr());
-});
-
-export function start(){
-    updatedialog.style.visibility="hidden";
-    deldialog.style.visibility="hidden";
+//show the add dialog when add post button is clicked
+export function showAdd(){
+    clear();
     postdialog.style.visibility = "visible";
 }
 
-
+//save the posts when the form submit
+postform.addEventListener("submit", (event) => { event.preventDefault(); save(); });
+//save the changes to a post and update the post list when confirm is clicked
+document.getElementById('confirm').addEventListener("click", (event) => { event.preventDefault(); editf(getcurr());});
+//Cancle btns, do nothing
+document.getElementById('cancle').addEventListener("click", (event) => { event.preventDefault(); clear();});
+document.getElementById('cancle1').addEventListener("click", (event) => { event.preventDefault(); clear();});
+document.getElementById('Cancle2').addEventListener("click", (event) => { event.preventDefault(); clear();});
+//delete the selected post and update the localstorage when ok button clicked
+document.getElementById('ok').addEventListener("click", (event) => { event.preventDefault(); delf(getcurr());});
+//loead data from localstorage to retrieve the post array
 window.addEventListener("load", () => {
     post = JSON.parse(localStorage.getItem("posts")) || [];
-    renderPosts();
+    refreshPosts();
 });
