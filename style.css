@@ -10,7 +10,9 @@ dialog{
     box-shadow: 10px;
     border-radius: 1rem;
     text-align: center;
-    position: fixed;
+    position:absolute;
+    left: 44%;
+    top: 120%;
 }
 
 h1{
