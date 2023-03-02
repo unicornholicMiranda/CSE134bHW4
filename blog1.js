@@ -136,6 +136,12 @@ export function start(){
     postdialog.style.visibility = "visible";
 }
 
+document.getElementById('cancle').addEventListener("click", (event) => {
+     event.preventDefault();
+     updatedialog.style.visibility="hidden";
+postdialog.style.visibility = "hidden";
+deldialog.style.visibility="hidden";
+});
 
 window.addEventListener("load", () => {
     post = JSON.parse(localStorage.getItem("posts1")) || [];
